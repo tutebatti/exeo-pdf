@@ -1,8 +1,12 @@
 #!/bin/bash
 
 #######################################
-#Simple script using pdftk to extract odd 
-# and even pages from pdf
+#
+# Simple script to extract
+# odd and even pages from pdf
+#
+# Based on and requires pdftk (https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/)
+#
 #######################################
 
 # check if handled file is a pdf
@@ -14,20 +18,14 @@ if ! echo $mtype | grep -q pdf ; then
 	exit 0
 fi
 
-# write filename without extension into variable "usedfile"
-
-usedfile=${1%.pdf}
-
-read -e -p "Beginning of page range for extracting even and odd pages, respectively: " pstart
-read -e -p "End of page range for extracting even and odd pages, respectively: " pend
+read -e -p "Beginning of page range for extracting even and odd pages: " pstart
+read -e -p "End of page range for extracting even and odd pages: " pend
 
 # using pdftk to split pages
 
-pdftk "$1" cat "$pstart"-"$pend"odd  output "${usedfile}_odd.pdf"
-pdftk "$1" cat "$pstart"-"$pend"even output "${usedfile}_even.pdf"
+pdftk "$1" cat "$pstart"-"$pend"odd  output "${1%.pdf}_odd.pdf"
+pdftk "$1" cat "$pstart"-"$pend"even output "${1%.pdf}_even.pdf"
 
-# output of information after processing
-
-echo "Even and odd pages in the page range "$pstart"-"$pend" in file ${usedfile}.pdf were extracted to ${usedfile}_odd.pdf and ${usedfile}_even.pdf, respectively."
+echo "Even and odd pages in the page range "$pstart"-"$pend" in file ${1%.pdf}.pdf were extracted to ${1%.pdf}_odd.pdf and ${1%.pdf}_even.pdf, respectively."
 
 exit 0
